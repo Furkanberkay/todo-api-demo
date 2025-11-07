@@ -14,6 +14,12 @@ type Todo struct {
 	Completed   bool   `json:"completed"`
 }
 
+type UpdateTodoDTO struct {
+	Name        *string `json:"name"`
+	Description *string `json:"description"`
+	Completed   *bool   `json:"completed"`
+}
+
 var todos = make(map[string]*Todo)
 
 func getTodos(c echo.Context) error {
@@ -74,7 +80,30 @@ func putTodos(c echo.Context) error {
 }
 
 func patchTodos(c echo.Context) error {
-	return nil
+
+	id := c.Param("id")
+	if id == "" {
+		return c.JSON(http.StatusBadRequest, "id is req")
+	}
+	value, ok := todos[id]
+	if !ok {
+		return c.JSON(http.StatusBadGateway, "")
+	}
+	todoDto := UpdateTodoDTO{}
+
+	if err := c.Bind(&todoDto); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	if todoDto.Description != nil || *todoDto.Description != "" {
+		value.Description = *todoDto.Description
+	}
+	if todoDto.Name != nil || *todoDto.Name != "" {
+		value.Name = *todoDto.Name
+	}
+	if todoDto.Completed != nil {
+		value.Completed = *todoDto.Completed
+	}
+	return c.JSON(http.StatusOK, value)
 }
 
 func Demo2() {
@@ -84,6 +113,6 @@ func Demo2() {
 	e.DELETE("/demo/:id", deleteTodos)
 	e.PUT("/demo/:id", putTodos)
 	e.PATCH("/demo/:id", patchTodos)
-	e.Logger.Fatal(e.Start(":8081"))
+	e.Logger.Fatal(e.Start(":8082"))
 
 }
