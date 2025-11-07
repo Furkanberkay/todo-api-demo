@@ -51,7 +51,7 @@ func addTodo(c echo.Context) error {
 	}
 
 	todos[todo.Id] = &todo
-	return c.JSON(http.StatusOK, todos[todo.Id])
+	return c.JSON(http.StatusCreated, todo)
 }
 
 func deleteTodos(c echo.Context) error {
@@ -79,7 +79,14 @@ func putTodos(c echo.Context) error {
 	if err := c.Bind(&todo); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	result.Id = todo.Id
+	if todo.Description == "" {
+		return c.JSON(http.StatusBadRequest, "description cant empty")
+	}
+	if todo.Name == "" {
+		return c.JSON(http.StatusBadRequest, "Name cant empty")
+	}
+
+	result.Id = id
 	result.Name = todo.Name
 	result.Description = todo.Description
 	result.Completed = todo.Completed
@@ -96,17 +103,17 @@ func patchTodos(c echo.Context) error {
 	}
 	value, ok := todos[id]
 	if !ok {
-		return c.JSON(http.StatusBadGateway, "")
+		return c.JSON(http.StatusNotFound, "todo not found")
 	}
 	todoDto := UpdateTodoDTO{}
 
 	if err := c.Bind(&todoDto); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	if todoDto.Description != nil || *todoDto.Description != "" {
+	if todoDto.Description != nil && *todoDto.Description != "" {
 		value.Description = *todoDto.Description
 	}
-	if todoDto.Name != nil || *todoDto.Name != "" {
+	if todoDto.Name != nil && *todoDto.Name != "" {
 		value.Name = *todoDto.Name
 	}
 	if todoDto.Completed != nil {

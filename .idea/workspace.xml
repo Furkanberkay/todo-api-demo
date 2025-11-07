@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="339afa24-04f3-4f0d-86f5-f7e548b96565" name="Changes" comment="">
+    <list default="true" id="339afa24-04f3-4f0d-86f5-f7e548b96565" name="Changes" comment="Add validation for required fields in addTodo function">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/demo2/demo2.go" beforeDir="false" afterPath="$PROJECT_DIR$/demo2/demo2.go" afterDir="false" />
     </list>
@@ -102,6 +102,12 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Fix getTodos error handling and improve addTodo conflict response" />
+    <MESSAGE value="Add PATCH endpoint for updating Todo items and adjust server port" />
+    <MESSAGE value="Add validation for required fields in addTodo function" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add validation for required fields in addTodo function" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
