@@ -20,19 +20,21 @@ func getTodos(c echo.Context) error {
 	req := c.Request().Header.Get("Accept")
 	fmt.Println(req)
 
-	err := c.JSON(http.StatusOK, todos)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
-	}
 	return c.JSON(http.StatusOK, todos)
+
 }
 
 func addTodo(c echo.Context) error {
 	todo := Todo{}
 	err := c.Bind(&todo)
+
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
+	if _, ok := todos[todo.Id]; ok {
+		return c.JSON(http.StatusConflict, "todo with this id already exists")
+	}
+
 	todos[todo.Id] = &todo
 	return c.JSON(http.StatusOK, todos[todo.Id])
 }
@@ -82,6 +84,6 @@ func Demo2() {
 	e.DELETE("/demo/:id", deleteTodos)
 	e.PUT("/demo/:id", putTodos)
 	e.PATCH("/demo/:id", patchTodos)
-	e.StdLogger.Fatal(e.Start(":8081"))
+	e.Logger.Fatal(e.Start(":8081"))
 
 }
