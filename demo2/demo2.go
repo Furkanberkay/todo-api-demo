@@ -40,6 +40,15 @@ func addTodo(c echo.Context) error {
 	if _, ok := todos[todo.Id]; ok {
 		return c.JSON(http.StatusConflict, "todo with this id already exists")
 	}
+	if todo.Name == "" {
+		return c.JSON(http.StatusBadRequest, "name is required")
+	}
+	if todo.Description == "" {
+		return c.JSON(http.StatusBadRequest, "Description is required")
+	}
+	if todo.Id == "" {
+		return c.JSON(http.StatusBadRequest, "Id is required")
+	}
 
 	todos[todo.Id] = &todo
 	return c.JSON(http.StatusOK, todos[todo.Id])
